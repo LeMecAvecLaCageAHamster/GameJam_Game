@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class player : MonoBehaviour
+public class Player : MonoBehaviour
 {
 
     public Transform spawn;
-    public double pointLife = 100;
+    public int pointLife = 100;
     public bool isAlive = true;
+    Camera mainCamera;
 
     void Start()
     {
@@ -16,11 +17,16 @@ public class player : MonoBehaviour
 
     void Update()
     {
-
         if (pointLife <= 0) { isAlive = false; } else { isAlive = true; }
+
+        if (isAlive == false)
+        {
+            this.transform.DetachChildren();
+            
+        }
     }
 
-    void getDamage(double damages)
+    void getDamage(int damages)
     {
         this.pointLife -= damages;
     }
@@ -29,9 +35,14 @@ public class player : MonoBehaviour
     {
         if (col.gameObject.tag == "ennemy")
         {
-            getDamage(25);
-            print("took damages !");
+            getDamage(10);
+            //print("took damages !");
         }
+    }
+
+    void deadParticles()
+    {
+
     }
 
 }
