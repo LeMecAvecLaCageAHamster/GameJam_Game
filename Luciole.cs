@@ -42,7 +42,8 @@ public class Luciole : MonoBehaviour {
 			rb.velocity = new Vector3 (0, 0, 0);
 			rb.MovePosition (player.position);
 			hero.Freeze (false);
-			Debug.Log ("hate ya");
+		} else if (GetComponent<Transform> ().position.x != player.position.x || GetComponent<Transform> ().position.y != player.position.y) {
+			GetComponent<Transform> ().position = player.position;
 		}
 
 		if (Input.GetButtonDown("Fire1")) {
