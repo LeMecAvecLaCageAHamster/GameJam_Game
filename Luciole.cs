@@ -127,7 +127,7 @@ public class Luciole : MonoBehaviour {
 			}
 		}
 
-		hero.getDamage (shockWaveCost);
+		hero.getDamage (shockwaveCost);
 
 		StartCoroutine (AnimateWave ());
 	}
