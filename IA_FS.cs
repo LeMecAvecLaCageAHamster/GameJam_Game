@@ -32,7 +32,7 @@ public class IA_FS : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.tag == "Platform")
+        if (col.gameObject.tag == "platform")
         {
             //transform.AddForce(new Vector3(0, 100, 0), ForceMode.Impulse);
             print("should jump");
