@@ -36,8 +36,8 @@ public class Luciole : MonoBehaviour {
 
         if (!attached) {
 			Move ();
-		} else if (Vector3.Distance (player.position, GetComponent<Transform> ().position) > 0.5f) {
-			GoBackToPlayer ();
+		} else if (Vector3.Distance (player.position, GetComponent<Transform> ().position) > 1.5f) {
+            GoBackToPlayer ();
 		} else if (hero.isFrozen) {
 			rb.velocity = new Vector3 (0, 0, 0);
 			rb.MovePosition (player.position);
