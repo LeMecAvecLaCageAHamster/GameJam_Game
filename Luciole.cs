@@ -7,6 +7,8 @@ using UnityEngine;
  * Dependancies:
  *   - RigidBody2D
  *   - CircleCollider
+ *   - Hero (Player)
+ *   - wave (circular sprite)
  */
 public class Luciole : MonoBehaviour {
 	private Rigidbody2D rb;
@@ -18,6 +20,11 @@ public class Luciole : MonoBehaviour {
 	public float maxSpeed = 5f;
 	public float acceleration = 9f;
 	public float deceleration = 0.9f;
+	public float distancePlayer = 1.5f;
+
+	public float waveRange = 5f;
+	public float waveSpeed = 0.5f;
+	public Transform wave;
 
 	bool flag = true; 
 
@@ -36,8 +43,9 @@ public class Luciole : MonoBehaviour {
 
         if (!attached) {
 			Move ();
-		} else if (Vector3.Distance (player.position, GetComponent<Transform> ().position) > 1.5f) {
-            GoBackToPlayer ();
+			Attack ();
+		} else if (Vector3.Distance (player.position, GetComponent<Transform> ().position) > distancePlayer) {
+			GoBackToPlayer ();
 		} else if (hero.isFrozen) {
 			rb.velocity = new Vector3 (0, 0, 0);
 			rb.MovePosition (player.position);
@@ -95,6 +103,28 @@ public class Luciole : MonoBehaviour {
 		}
 	}
 
+	void Attack() {
+		if (Input.GetButtonDown ("Fire2")) {
+			ShockWave ();
+		}
+	}
+
+	void ShockWave() {
+		Collider2D[] hits = Physics2D.OverlapCircleAll (
+			                   GetComponent<Transform> ().position,
+			                   waveRange);
+		foreach (Collider2D hit in hits) {
+			Monster monster = hit.transform.GetComponent<Monster> ();
+			if (monster != null) {
+				monster.Trigger();
+			}
+		}
+
+		hero.getDamage (10);
+
+		StartCoroutine (AnimateWave ());
+	}
+
 	void GoBackToPlayer() {
 		Vector3 direction = (player.position - GetComponent<Transform>().position).normalized;
 		rb.MovePosition(transform.position + direction * acceleration * 4 * Time.deltaTime);
@@ -106,5 +136,19 @@ public class Luciole : MonoBehaviour {
 		yield return new WaitForSeconds(time); 
 		hero.pointLife ++; 
 		flag = true; 
+	}
+
+	IEnumerator AnimateWave() {
+		float alpha = transform.GetComponent<Renderer>().material.color.a;
+		for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / waveSpeed)
+		{
+			// Opacity
+			Color newColor = new Color(1, 1, 1, Mathf.Lerp(alpha , 0f, t));
+			wave.GetComponent<Renderer>().material.color = newColor;
+
+			// Size
+			wave.localScale = Vector3.Lerp(new Vector3(0, 0, 1), new Vector3(waveRange * 2, waveRange * 2, 1), t);
+			yield return null;
+		}
 	}
 }
