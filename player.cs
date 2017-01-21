@@ -47,7 +47,7 @@ public class Player : MonoBehaviour
 
     }
 
-    void getDamage(int damages)
+    public void getDamage(int damages)
     {
         this.pointLife -= damages;
     }

@@ -7,6 +7,8 @@ using UnityEngine;
  * Dependancies:
  *   - RigidBody2D
  *   - CircleCollider
+ *   - Hero (Player)
+ *   - wave (circular sprite)
  */
 public class Luciole : MonoBehaviour {
 	private Rigidbody2D rb;
@@ -20,7 +22,8 @@ public class Luciole : MonoBehaviour {
 	public float deceleration = 0.9f;
 	public float distancePlayer = 1.5f;
 
-	public float waveRange = 2f;
+	public float waveRange = 5f;
+	public float waveSpeed = 0.5f;
 	public Transform wave;
 
 	bool flag = true; 
@@ -116,6 +119,10 @@ public class Luciole : MonoBehaviour {
 				monster.Trigger();
 			}
 		}
+
+		hero.getDamage (10);
+
+		StartCoroutine (AnimateWave ());
 	}
 
 	void GoBackToPlayer() {
@@ -129,5 +136,19 @@ public class Luciole : MonoBehaviour {
 		yield return new WaitForSeconds(time); 
 		hero.pointLife ++; 
 		flag = true; 
+	}
+
+	IEnumerator AnimateWave() {
+		float alpha = transform.GetComponent<Renderer>().material.color.a;
+		for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / waveSpeed)
+		{
+			// Opacity
+			Color newColor = new Color(1, 1, 1, Mathf.Lerp(alpha , 0f, t));
+			wave.GetComponent<Renderer>().material.color = newColor;
+
+			// Size
+			wave.localScale = Vector3.Lerp(new Vector3(0, 0, 1), new Vector3(waveRange * 2, waveRange * 2, 1), t);
+			yield return null;
+		}
 	}
 }
