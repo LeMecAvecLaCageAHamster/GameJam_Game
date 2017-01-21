@@ -25,6 +25,7 @@ public class Luciole : MonoBehaviour {
 
 	public float waveRange = 5f;
 	public float waveSpeed = 0.5f;
+	public int shockwaveCost = 10;
 	public Transform wave;
 
 	bool flag = true; 
@@ -110,7 +111,7 @@ public class Luciole : MonoBehaviour {
 	}
 
 	void Attack() {
-		if (Input.GetButtonDown ("Fire2")) {
+		if (Input.GetButtonDown ("Fire2") && hero.pointLife > shockwaveCost) {
 			ShockWave ();
 		}
 	}
@@ -126,7 +127,7 @@ public class Luciole : MonoBehaviour {
 			}
 		}
 
-		hero.getDamage (10);
+		hero.getDamage (shockwaveCost);
 
 		StartCoroutine (AnimateWave ());
 	}
