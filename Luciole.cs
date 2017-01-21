@@ -19,6 +19,9 @@ public class Luciole : MonoBehaviour {
 	public float acceleration = 9f;
 	public float deceleration = 0.9f;
 
+	public float waveRange = 2f;
+	public Transform wave;
+
 	bool flag = true; 
 
 	private Player hero; 
@@ -36,8 +39,9 @@ public class Luciole : MonoBehaviour {
 
         if (!attached) {
 			Move ();
-		} else if (Vector3.Distance (player.position, GetComponent<Transform> ().position) > 1.5f) {
-            GoBackToPlayer ();
+			Attack ();
+		} else if (Vector3.Distance (player.position, GetComponent<Transform> ().position) > 0.5f) {
+			GoBackToPlayer ();
 		} else if (hero.isFrozen) {
 			rb.velocity = new Vector3 (0, 0, 0);
 			rb.MovePosition (player.position);
@@ -92,6 +96,24 @@ public class Luciole : MonoBehaviour {
 
 		if (Mathf.Abs(Input.GetAxis ("Horizontal")) < 1f && Mathf.Abs(Input.GetAxis ("Vertical")) < 1f) {
 			rb.velocity = rb.velocity * deceleration;
+		}
+	}
+
+	void Attack() {
+		if (Input.GetButtonDown ("Fire2")) {
+			ShockWave ();
+		}
+	}
+
+	void ShockWave() {
+		Collider2D[] hits = Physics2D.OverlapCircleAll (
+			                   GetComponent<Transform> ().position,
+			                   waveRange);
+		foreach (Collider2D hit in hits) {
+			Monster monster = hit.transform.GetComponent<Monster> ();
+			if (monster != null) {
+				monster.Trigger();
+			}
 		}
 	}
 
