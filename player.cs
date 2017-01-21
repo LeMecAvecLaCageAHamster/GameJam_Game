@@ -7,7 +7,10 @@ public class Player : MonoBehaviour
 
     public Transform spawn;
     public int pointLife = 10;
+    public int maxLife = 100;
     public bool isAlive = true;
+
+
     Camera mainCamera;
     public ParticleSystem particle;
     private bool printDead = true;
@@ -56,4 +59,5 @@ public class Player : MonoBehaviour
 		GetComponent<Platformer2DUserControl>().enabled = !value;
 		isFrozen = value;
 	}
+
 }

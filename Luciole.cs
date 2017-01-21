@@ -16,6 +16,7 @@ public class Luciole : MonoBehaviour {
 	public Transform player;
 	private bool attached = true;
 	public Light light;
+    public float range = 5;
 
 	public float maxSpeed = 5f;
 	public float acceleration = 9f;
@@ -65,7 +66,11 @@ public class Luciole : MonoBehaviour {
 		}
 
 		//light.range = ((float)hero.pointLife) * Time.deltaTime * 20; //ARCHI VERY ULTRA TROP IMPORTANT MAGGLE !!!!!!!!!!!!!!! 
+
 		//light.range = ((float)hero.pointLife) / 5;
+
+		light.range = ((float)hero.pointLife) /  range;
+
 		//light.color -= (Color.cyan) * (2.0F * Time.deltaTime); 
 
 		while(hero.pointLife < 100 && hero.pointLife < 0) 
@@ -85,18 +90,19 @@ public class Luciole : MonoBehaviour {
 		float hMovement = Input.GetAxis ("Horizontal") != 0f ? 
 			Input.GetAxis ("Horizontal") * rb.velocity.x >= 0 ?
 				Input.GetAxis ("Horizontal") * acceleration :
-				Input.GetAxis ("Horizontal") * 10*acceleration :
-			0;
+				Input.GetAxis ("Horizontal") *acceleration :
+			rb.velocity.x;
 		float vMovement = Input.GetAxis ("Vertical") != 0f ? 
 			Input.GetAxis ("Vertical") * rb.velocity.y >= 0 ?
 				Input.GetAxis ("Vertical") * acceleration :
-				Input.GetAxis ("Vertical") * 10*acceleration :
-			0;
+				Input.GetAxis ("Vertical") *acceleration :
+			rb.velocity.y;
 
 		Vector2 moveDirection = new Vector3 (
 			Mathf.Abs(rb.velocity.x) <= maxSpeed || rb.velocity.x * hMovement < 0 ? hMovement : 0f,
 			Mathf.Abs(rb.velocity.y) <= maxSpeed || rb.velocity.y * vMovement < 0 ? vMovement : 0f);
-		rb.AddForce (moveDirection);
+		//rb.AddForce (moveDirection);
+		rb.velocity = moveDirection;
 
 		if (Mathf.Abs(Input.GetAxis ("Horizontal")) < 1f && Mathf.Abs(Input.GetAxis ("Vertical")) < 1f) {
 			rb.velocity = rb.velocity * deceleration;
@@ -127,7 +133,7 @@ public class Luciole : MonoBehaviour {
 
 	void GoBackToPlayer() {
 		Vector3 direction = (player.position - GetComponent<Transform>().position).normalized;
-		rb.MovePosition(transform.position + direction * acceleration * 4 * Time.deltaTime);
+		rb.MovePosition(transform.position + direction * acceleration/4  * Time.deltaTime);
 	}
 
 	public IEnumerator Wait(float time) 
@@ -151,4 +157,42 @@ public class Luciole : MonoBehaviour {
 			yield return null;
 		}
 	}
+
+    public void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "energy")
+        {
+            print("near source of energy");
+            if (hero.pointLife < hero.maxLife)
+            {
+                // hero.pointLife = hero.maxLife;
+
+                StartCoroutine(AnimatedLife());
+
+                
+
+
+            }
+        }
+    }
+
+    public IEnumerator AnimatedLife()
+    {
+        float startLife = hero.pointLife;
+        float endLife = hero.maxLife;
+
+        for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / 2f)
+        {
+            hero.pointLife = Mathf.RoundToInt(Mathf.Lerp(startLife, endLife, t));
+            print(hero.pointLife);
+            yield return null;
+        }
+
+        hero.pointLife = hero.maxLife;
+
+        print("Now full life !");
+
+        
+    }
+
 }
