@@ -18,6 +18,7 @@ public class Luciole : MonoBehaviour {
 	public float maxSpeed = 5f;
 	public float acceleration = 9f;
 	public float deceleration = 0.9f;
+	public float distancePlayer = 1.5f;
 
 	public float waveRange = 2f;
 	public Transform wave;
@@ -40,7 +41,7 @@ public class Luciole : MonoBehaviour {
         if (!attached) {
 			Move ();
 			Attack ();
-		} else if (Vector3.Distance (player.position, GetComponent<Transform> ().position) > 0.5f) {
+		} else if (Vector3.Distance (player.position, GetComponent<Transform> ().position) > distancePlayer) {
 			GoBackToPlayer ();
 		} else if (hero.isFrozen) {
 			rb.velocity = new Vector3 (0, 0, 0);
