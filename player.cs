@@ -28,7 +28,6 @@ public class Player : MonoBehaviour
         if (isAlive == false && printDead == true)
         {
             this.transform.DetachChildren();
-            //particle.gameObject.SetActive(true);
             particle.enableEmission = true;
             particle.Play();
             Destroy(this.gameObject);
