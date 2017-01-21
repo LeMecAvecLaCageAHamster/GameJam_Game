@@ -16,6 +16,7 @@ public class Luciole : MonoBehaviour {
 	public Transform player;
 	private bool attached = true;
 	public Light light;
+    public float range = 5;
 
 	public float maxSpeed = 5f;
 	public float acceleration = 9f;
@@ -65,7 +66,7 @@ public class Luciole : MonoBehaviour {
 		}
 
 		//light.range = ((float)hero.pointLife) * Time.deltaTime * 20; //ARCHI VERY ULTRA TROP IMPORTANT MAGGLE !!!!!!!!!!!!!!! 
-		light.range = ((float)hero.pointLife) / 5;
+		light.range = ((float)hero.pointLife) /  range;
 		//light.color -= (Color.cyan) * (2.0F * Time.deltaTime); 
 
 		while(hero.pointLife < 100 && hero.pointLife < 0) 
@@ -151,4 +152,42 @@ public class Luciole : MonoBehaviour {
 			yield return null;
 		}
 	}
+
+    public void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "energy")
+        {
+            print("near source of energy");
+            if (hero.pointLife < hero.maxLife)
+            {
+                // hero.pointLife = hero.maxLife;
+
+                StartCoroutine(AnimatedLife());
+
+                
+
+
+            }
+        }
+    }
+
+    public IEnumerator AnimatedLife()
+    {
+        float startLife = hero.pointLife;
+        float endLife = hero.maxLife;
+
+        for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / 2f)
+        {
+            hero.pointLife = Mathf.RoundToInt(Mathf.Lerp(startLife, endLife, t));
+            print(hero.pointLife);
+            yield return null;
+        }
+
+        hero.pointLife = hero.maxLife;
+
+        print("Now full life !");
+
+        
+    }
+
 }
