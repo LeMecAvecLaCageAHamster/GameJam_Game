@@ -6,9 +6,12 @@ public class Player : MonoBehaviour
 {
 
     public Transform spawn;
-    public int pointLife = 100;
+    public int pointLife = 10;
     public bool isAlive = true;
     Camera mainCamera;
+    public ParticleSystem particle;
+    private bool printDead = true;
+
 
 	public bool isFrozen = false;
 
@@ -22,30 +25,32 @@ public class Player : MonoBehaviour
     {
         if (pointLife <= 0) { isAlive = false; } else { isAlive = true; }
 
-        if (isAlive == false)
+        if (isAlive == false && printDead == true)
         {
             this.transform.DetachChildren();
-            
+            //particle.gameObject.SetActive(true);
+            particle.enableEmission = true;
+            particle.Play();
+            Destroy(this.gameObject);
+            print("Instantie particules");
+            printDead = false;
         }
+    }
+
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "ennemy" && isAlive == true)
+        {
+            getDamage(10);
+            //print("took damages !");
+        }
+
     }
 
     void getDamage(int damages)
     {
         this.pointLife -= damages;
-    }
-
-    void OnCollisionEnter2D(Collision2D col)
-    {
-        if (col.gameObject.tag == "ennemy")
-        {
-            getDamage(10);
-            //print("took damages !");
-        }
-    }
-
-    void deadParticles()
-    {
-
     }
 
 	public void Freeze(bool value) {

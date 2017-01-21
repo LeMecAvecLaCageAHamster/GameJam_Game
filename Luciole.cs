@@ -33,7 +33,8 @@ public class Luciole : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (!attached) {
+
+        if (!attached) {
 			Move ();
 		} else if (Vector3.Distance (player.position, GetComponent<Transform> ().position) > 0.5f) {
 			GoBackToPlayer ();
@@ -55,7 +56,7 @@ public class Luciole : MonoBehaviour {
 		}
 
 		//light.range = ((float)hero.pointLife) * Time.deltaTime * 20; //ARCHI VERY ULTRA TROP IMPORTANT MAGGLE !!!!!!!!!!!!!!! 
-		light.range = ((float)hero.pointLife) / 5; 
+		light.range = ((float)hero.pointLife) / 5;
 		//light.color -= (Color.cyan) * (2.0F * Time.deltaTime); 
 
 		while(hero.pointLife < 100 && hero.pointLife < 0) 
@@ -68,6 +69,8 @@ public class Luciole : MonoBehaviour {
 
 		}
 	}
+
+
 
 	void Move() {
 		float hMovement = Input.GetAxis ("Horizontal") != 0f ? 
