@@ -65,7 +65,7 @@ public class Luciole : MonoBehaviour {
 		}
 
 		//light.range = ((float)hero.pointLife) * Time.deltaTime * 20; //ARCHI VERY ULTRA TROP IMPORTANT MAGGLE !!!!!!!!!!!!!!! 
-		light.range = ((float)hero.pointLife) / 5;
+		//light.range = ((float)hero.pointLife) / 5;
 		//light.color -= (Color.cyan) * (2.0F * Time.deltaTime); 
 
 		while(hero.pointLife < 100 && hero.pointLife < 0) 
