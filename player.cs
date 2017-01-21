@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityStandardAssets._2D;
 
 public class Player : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class Player : MonoBehaviour
     public int pointLife = 100;
     public bool isAlive = true;
     Camera mainCamera;
+
+	public bool isFrozen = false;
 
     void Start()
     {
@@ -45,4 +48,8 @@ public class Player : MonoBehaviour
 
     }
 
+	public void Freeze(bool value) {
+		GetComponent<Platformer2DUserControl>().enabled = !value;
+		isFrozen = value;
+	}
 }
