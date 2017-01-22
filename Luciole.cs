@@ -154,7 +154,7 @@ public class Luciole : MonoBehaviour {
 	}
 
 	IEnumerator AnimateWave() {
-		float alpha = transform.GetComponent<Renderer>().material.color.a;
+		float alpha = 1f;
 		for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / waveSpeed)
 		{
 			// Opacity
