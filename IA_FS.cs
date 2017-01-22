@@ -9,6 +9,8 @@ public class IA_FS : MonoBehaviour {
     public float speed;
     public float jump = 2;
     public Rigidbody2D rb;
+    public Luciole luciole;
+    public bool isTriggered = false;
 
     private Vector2 movement;
     private Vector3 jumping = new Vector3(0, 1,0);
@@ -21,12 +23,14 @@ public class IA_FS : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         float step = speed * Time.deltaTime;
-        movement = Vector2.MoveTowards(transform.position, target.position, step);
-        //movement.y = 0;
-        //transform.position = movement;
-        //movement.y = 0;
-        //print("movement x = " + (movement.x - transform.position.x));
-        transform.Translate(movement.x-transform.position.x,0,0);
+        if (Vector2.Distance(transform.position, luciole.transform.position) < luciole.light.range + range) isTriggered = true;
+
+
+        if (isTriggered)
+        {
+            movement = Vector2.MoveTowards(transform.position, target.position, step);
+            transform.Translate(movement.x - transform.position.x, 0, 0);
+        }
 
     }
 
