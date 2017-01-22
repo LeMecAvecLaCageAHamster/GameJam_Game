@@ -131,7 +131,7 @@ public class Luciole : MonoBehaviour {
 		foreach (Collider2D hit in hits) {
 			Monster monster = hit.transform.GetComponent<Monster> ();
 			if (monster != null) {
-				monster.Trigger();
+				monster.Trigger (GetComponent<Transform> ().position);
 			}
 		}
 
