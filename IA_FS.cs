@@ -11,6 +11,7 @@ public class IA_FS : Monster {
     public Rigidbody2D rb;
     public Luciole luciole;
     public bool isTriggered = false;
+    public int pv = 3;
 
     private Vector2 movement;
     private Vector3 jumping = new Vector3(0, 1,0);
@@ -23,6 +24,11 @@ public class IA_FS : Monster {
     public override void Trigger(Vector2 source)
     {
         isTriggered = true;
+        if (pv > 0) {
+            pv--;
+            print("pv : " + pv);
+                }
+        if (pv == 0) Destroy(gameObject);
     }
 
 	// Update is called once per frame
