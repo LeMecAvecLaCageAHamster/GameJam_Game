@@ -17,9 +17,17 @@ public class Player : MonoBehaviour
 
 	public bool isFrozen = false;
 
+    private AudioSource audioSource;
+    public AudioClip jumpClip;
+    public AudioClip hurtClip;
+    public AudioClip deathClip;
+    public AudioClip respawnClip;
+
+
     void Start()
     {
         this.transform.position = spawn.transform.position;
+        audioSource = GetComponent<AudioSource>();
     }
 
 
@@ -32,6 +40,7 @@ public class Player : MonoBehaviour
 
         if (isAlive == false && printDead == true)
         {
+            audioSource.PlayOneShot(deathClip);
 			Freeze (true);
             printDead = false;
 			StartCoroutine (respawn ());
@@ -52,6 +61,7 @@ public class Player : MonoBehaviour
     public void getDamage(int damages)
     {
         this.pointLife -= damages;
+        audioSource.PlayOneShot(hurtClip);
     }
 
 	public void Freeze(bool value) {
@@ -70,5 +80,6 @@ public class Player : MonoBehaviour
 		isAlive = true;
 		printDead = true;
 		Freeze (false);
+        audioSource.PlayOneShot(respawnClip);
 	}
 }

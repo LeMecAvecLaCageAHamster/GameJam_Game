@@ -28,6 +28,14 @@ public class Luciole : MonoBehaviour {
 	public int shockwaveCost = 10;
 	public Transform wave;
 
+    private AudioSource audioSource;
+    public AudioClip detachClip;
+    public AudioClip attachClip;
+    public AudioClip refillClip;
+    public AudioClip waveClip;
+    public AudioClip emptyEnergyClip;
+
+
 	bool flag = true; 
 	bool respawn = true;
 
@@ -39,6 +47,8 @@ public class Luciole : MonoBehaviour {
 		Physics2D.IgnoreCollision(player.GetComponent<CircleCollider2D>(), GetComponent<CircleCollider2D>());
 		Physics2D.IgnoreCollision(player.GetComponent<BoxCollider2D>(), GetComponent<CircleCollider2D>());
 		hero = player.GetComponent<Player>();
+
+        audioSource = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -62,9 +72,11 @@ public class Luciole : MonoBehaviour {
 			GetComponent<CircleCollider2D> ().enabled = !attached;
 			if (attached) {
 				rb.velocity = new Vector2 (0f, 0f);
+                audioSource.PlayOneShot(attachClip);
 			} else {
 				hero.Freeze (true);
 				rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+                audioSource.PlayOneShot(detachClip);
 			}
 		}
 
@@ -118,8 +130,13 @@ public class Luciole : MonoBehaviour {
 
 	void Attack() {
 		if (Input.GetButtonDown ("Fire2") && hero.pointLife > shockwaveCost) {
+            audioSource.PlayOneShot(waveClip);
 			ShockWave ();
 		}
+        else
+        {
+            audioSource.PlayOneShot(emptyEnergyClip);
+        }
 	}
 
 	void ShockWave() {
@@ -173,12 +190,8 @@ public class Luciole : MonoBehaviour {
             if (hero.pointLife < hero.maxLife)
             {
                 // hero.pointLife = hero.maxLife;
-
+                audioSource.PlayOneShot(refillClip);
                 StartCoroutine(AnimatedLife());
-
-                
-
-
             }
         }
     }

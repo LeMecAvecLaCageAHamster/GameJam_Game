@@ -17,10 +17,16 @@ public class IA_FS : Monster {
     private Vector3 jumping = new Vector3(0, 1,0);
     private bool dead = false;
     public ParticleSystem particle;
+
+    private AudioSource audioSource;
+    public AudioClip hurtClip;
+    public AudioClip deathClip;
+
     // Use this for initialization
     void Start () {
         rb = this.GetComponent<Rigidbody2D>();
         print(rb);
+        audioSource = GetComponent<AudioSource>();
     }
 	
     public override void Trigger(Vector2 source)
@@ -29,6 +35,7 @@ public class IA_FS : Monster {
         if (pv > 0) {
             pv--;
             print("pv : " + pv);
+            audioSource.PlayOneShot(hurtClip);
                 }
         if (pv == 0 && !dead) Die();
     }
@@ -67,6 +74,7 @@ public class IA_FS : Monster {
     void Die()
     {
         dead = true;
+        audioSource.PlayOneShot(deathClip);
         GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
         StartCoroutine(DeathAnimation());
     }
