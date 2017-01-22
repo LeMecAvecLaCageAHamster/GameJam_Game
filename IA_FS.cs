@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IA_FS : MonoBehaviour {
+public class IA_FS : Monster {
 
     public float range;
     public Transform target;
@@ -20,10 +20,15 @@ public class IA_FS : MonoBehaviour {
         print(rb);
     }
 	
+    public override void Trigger(Vector2 source)
+    {
+        isTriggered = true;
+    }
+
 	// Update is called once per frame
 	void Update () {
         float step = speed * Time.deltaTime;
-        if (Vector2.Distance(transform.position, luciole.transform.position) < luciole.light.range + range) isTriggered = true;
+        //if (Vector2.Distance(transform.position, luciole.transform.position) < luciole.light.range + range) isTriggered = true;
 
 
         if (isTriggered)
