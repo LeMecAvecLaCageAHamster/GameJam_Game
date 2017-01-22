@@ -183,6 +183,15 @@ public class Luciole : MonoBehaviour {
         }
     }
 
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "ennemy" && hero.isAlive == true)
+        {
+            hero.getDamage(20);
+        }
+
+    }
+
     public IEnumerator AnimatedLife()
     {
         float startLife = hero.pointLife;
