@@ -45,6 +45,12 @@ public class IA_FS : Monster {
 
     }
 
+	void FixedUpdate() {
+	// Set the vertical animation
+		Animator m_Anim = GetComponent<Animator>();
+		m_Anim.SetFloat("vSpeed", GetComponent<Rigidbody2D>().velocity.y);
+	}
+
     private void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.tag == "platform")

@@ -24,11 +24,15 @@ public class IA_Follower : MonoBehaviour {
         // transform.position
         if (Vector2.Distance(transform.position, luciole.transform.position)< luciole.light.range+range) isTriggered = true; 
 
-
         if (isTriggered)
         {
             float step = speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, target.position, step);
+
+			// Flip
+			Vector3 theScale = transform.localScale;
+			theScale.x = (target.position.x < transform.position.x ? -1 : 1) * Mathf.Abs(theScale.x);
+			transform.localScale = theScale;
         }
         
 
