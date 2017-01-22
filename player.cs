@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     Camera mainCamera;
     public ParticleSystem particle;
     private bool printDead = true;
-
+	public float deathHeight = -30;
 
 	public bool isFrozen = false;
 
@@ -26,16 +26,19 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (pointLife <= 0) { isAlive = false; } else { isAlive = true; }
+		if (GetComponent<Transform> ().position.y < deathHeight) {
+			pointLife = 0;
+		}
+		if (pointLife <= 0) { isAlive = false; } else { isAlive = true; }
 
         if (isAlive == false && printDead == true)
         {
-            this.transform.DetachChildren();
+			Freeze (true);
             particle.enableEmission = true;
             particle.Play();
-            Destroy(this.gameObject);
             print("Instantie particules");
             printDead = false;
+			StartCoroutine (respawn ());
         }
     }
 
@@ -64,4 +67,12 @@ public class Player : MonoBehaviour
 		animator.Play ("Idle");
 	}
 
+	IEnumerator respawn() {
+		yield return new WaitForSeconds(2);
+		GetComponent<Transform> ().position = spawn.position;
+		pointLife = maxLife;
+		isAlive = true;
+		printDead = true;
+		Freeze (false);
+	}
 }

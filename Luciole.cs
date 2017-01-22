@@ -29,6 +29,7 @@ public class Luciole : MonoBehaviour {
 	public Transform wave;
 
 	bool flag = true; 
+	bool respawn = false;
 
 	private Player hero; 
 
@@ -43,15 +44,14 @@ public class Luciole : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (!attached) {
+		if (!attached) {
 			Move ();
 			Attack ();
 		} else if (Vector3.Distance (player.position, GetComponent<Transform> ().position) > distancePlayer) {
 			GoBackToPlayer ();
-		} else if (hero.isFrozen) {
+		} else if (hero.isFrozen && hero.isAlive) {
 			rb.velocity = new Vector3 (0, 0, 0);
 			rb.MovePosition (player.position);
-			rb.constraints = RigidbodyConstraints2D.FreezeAll;
 			hero.Freeze (false);
 		} else if (GetComponent<Transform> ().position.x != player.position.x || GetComponent<Transform> ().position.y != player.position.y) {
 			GetComponent<Transform> ().position = player.position;
@@ -66,6 +66,19 @@ public class Luciole : MonoBehaviour {
 				hero.Freeze (true);
 				rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 			}
+		}
+
+		if (!hero.isAlive) {
+			if (!attached) {
+				attached = true;
+				GetComponent<CircleCollider2D> ().enabled = false;
+			}
+			GetComponent<Transform> ().position = player.position;
+			respawn = true;
+		}
+		if (respawn && hero.isAlive) {
+			GetComponent<Transform> ().position = player.position;
+			respawn = false;
 		}
 
 		//light.range = ((float)hero.pointLife) * Time.deltaTime * 20; //ARCHI VERY ULTRA TROP IMPORTANT MAGGLE !!!!!!!!!!!!!!! 

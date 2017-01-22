@@ -24,8 +24,6 @@ public class FlyMovement : MonoBehaviour {
 
 	IEnumerator MoveToGoal(Vector2 goal) {
 		Vector2 start = GetComponent<Transform> ().localPosition;
-		Debug.Log ("start " + start.x);
-		Debug.Log ("to " + goal.x);
 		for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / delay)
 		{
 			float posX = Mathf.Lerp (start.x, goal.x, t);
@@ -34,8 +32,6 @@ public class FlyMovement : MonoBehaviour {
 
 			yield return null;
 		}
-		Debug.Log ("End " + GetComponent<Transform> ().localPosition.x);
-
 		moving = false;
 	}
 }
