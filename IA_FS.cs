@@ -15,6 +15,8 @@ public class IA_FS : Monster {
 
     private Vector2 movement;
     private Vector3 jumping = new Vector3(0, 1,0);
+    private bool dead = false;
+    public Transform deathWave;
     // Use this for initialization
     void Start () {
         rb = this.GetComponent<Rigidbody2D>();
@@ -28,7 +30,7 @@ public class IA_FS : Monster {
             pv--;
             print("pv : " + pv);
                 }
-        if (pv == 0) Destroy(gameObject);
+        if (pv == 0 && !dead) Die();
     }
 
 	// Update is called once per frame
@@ -37,7 +39,7 @@ public class IA_FS : Monster {
         //if (Vector2.Distance(transform.position, luciole.transform.position) < luciole.light.range + range) isTriggered = true;
 
 
-        if (isTriggered)
+        if (isTriggered && !dead)
         {
             movement = Vector2.MoveTowards(transform.position, target.position, step);
             transform.Translate(movement.x - transform.position.x, 0, 0);
@@ -46,20 +48,43 @@ public class IA_FS : Monster {
     }
 
 	void FixedUpdate() {
-	// Set the vertical animation
-		Animator m_Anim = GetComponent<Animator>();
-		m_Anim.SetFloat("vSpeed", GetComponent<Rigidbody2D>().velocity.y);
+        // Set the vertical animation
+        Animator m_Anim = GetComponent<Animator>();
+        m_Anim.SetFloat("vSpeed", GetComponent<Rigidbody2D>().velocity.y);
 	}
 
     private void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.tag == "platform")
+        if (col.gameObject.tag == "platform" && !dead)
         {
             //transform.AddForce(new Vector3(0, 100, 0), ForceMode.Impulse);
             print("should jump");
             //rb.AddForce(Vector3.up * jump);
             rb.AddForce(Vector2.up*jump, ForceMode2D.Impulse);
         }
+    }
+
+    void Die()
+    {
+        dead = true;
+        GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
+        StartCoroutine(DeathAnimation());
+    }
+
+    IEnumerator DeathAnimation()
+    {
+        for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / 1f)
+        {
+            // Opacity
+            Color newColor = new Color(0, 0, 0, Mathf.Lerp(1, 0f, t));
+            deathWave.GetComponent<Renderer>().material.color = newColor;
+
+            // Size
+            deathWave.localScale = Vector3.Lerp(new Vector3(0, 0, 1), new Vector3(4, 4, 1), t);
+            yield return null;
+        }
+
+        Destroy(gameObject);
     }
 
 }
