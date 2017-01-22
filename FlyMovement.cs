@@ -37,7 +37,7 @@ public class FlyMovement : MonoBehaviour {
 		{
 			float posX = Mathf.Lerp (start.x, goal.x, t);
 			float posY = Mathf.Lerp (start.y, goal.y, t);
-			GetComponent<Transform> ().localPosition = new Vector3 (posX, posY, transform.position.z);
+			GetComponent<Transform> ().localPosition = new Vector3 (posX, posY, -2);
 
 			yield return null;
 		}

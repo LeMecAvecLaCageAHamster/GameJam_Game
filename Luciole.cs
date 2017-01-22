@@ -29,7 +29,7 @@ public class Luciole : MonoBehaviour {
 	public Transform wave;
 
 	bool flag = true; 
-	bool respawn = false;
+	bool respawn = true;
 
 	private Player hero; 
 
