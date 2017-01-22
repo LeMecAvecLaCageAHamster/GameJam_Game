@@ -18,10 +18,10 @@ public class Luciole : MonoBehaviour {
 	public Light light;
     public float range = 5;
 
-	public float maxSpeed = 5f;
 	public float acceleration = 9f;
 	public float deceleration = 0.9f;
 	public float distancePlayer = 1.5f;
+	public float backSpeed = 30;
 
 	public float waveRange = 5f;
 	public float waveSpeed = 0.5f;
@@ -51,6 +51,7 @@ public class Luciole : MonoBehaviour {
 		} else if (hero.isFrozen) {
 			rb.velocity = new Vector3 (0, 0, 0);
 			rb.MovePosition (player.position);
+			rb.constraints = RigidbodyConstraints2D.FreezeAll;
 			hero.Freeze (false);
 		} else if (GetComponent<Transform> ().position.x != player.position.x || GetComponent<Transform> ().position.y != player.position.y) {
 			GetComponent<Transform> ().position = player.position;
@@ -63,6 +64,7 @@ public class Luciole : MonoBehaviour {
 				rb.velocity = new Vector2 (0f, 0f);
 			} else {
 				hero.Freeze (true);
+				rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 			}
 		}
 
@@ -89,20 +91,13 @@ public class Luciole : MonoBehaviour {
 
 	void Move() {
 		float hMovement = Input.GetAxis ("Horizontal") != 0f ? 
-			Input.GetAxis ("Horizontal") * rb.velocity.x >= 0 ?
-				Input.GetAxis ("Horizontal") * acceleration :
-				Input.GetAxis ("Horizontal") *acceleration :
+			Input.GetAxis ("Horizontal") * acceleration :
 			rb.velocity.x;
 		float vMovement = Input.GetAxis ("Vertical") != 0f ? 
-			Input.GetAxis ("Vertical") * rb.velocity.y >= 0 ?
-				Input.GetAxis ("Vertical") * acceleration :
-				Input.GetAxis ("Vertical") *acceleration :
+			Input.GetAxis ("Vertical") * acceleration :
 			rb.velocity.y;
 
-		Vector2 moveDirection = new Vector3 (
-			Mathf.Abs(rb.velocity.x) <= maxSpeed || rb.velocity.x * hMovement < 0 ? hMovement : 0f,
-			Mathf.Abs(rb.velocity.y) <= maxSpeed || rb.velocity.y * vMovement < 0 ? vMovement : 0f);
-		//rb.AddForce (moveDirection);
+		Vector2 moveDirection = new Vector3 (hMovement, vMovement);
 		rb.velocity = moveDirection;
 
 		if (Mathf.Abs(Input.GetAxis ("Horizontal")) < 1f && Mathf.Abs(Input.GetAxis ("Vertical")) < 1f) {
@@ -134,7 +129,7 @@ public class Luciole : MonoBehaviour {
 
 	void GoBackToPlayer() {
 		Vector3 direction = (player.position - GetComponent<Transform>().position).normalized;
-		rb.MovePosition(transform.position + direction * acceleration/4  * Time.deltaTime);
+		rb.MovePosition(transform.position + direction * backSpeed  * Time.deltaTime);
 	}
 
 	public IEnumerator Wait(float time) 
