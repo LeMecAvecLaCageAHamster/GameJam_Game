@@ -100,8 +100,6 @@ public class Luciole : MonoBehaviour {
 		}
 	}
 
-
-
 	void Move() {
 		float hMovement = Input.GetAxis ("Horizontal") != 0f ? 
 			Input.GetAxis ("Horizontal") * acceleration :
