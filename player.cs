@@ -58,6 +58,10 @@ public class Player : MonoBehaviour
 	public void Freeze(bool value) {
 		GetComponent<Platformer2DUserControl>().enabled = !value;
 		isFrozen = value;
+		GetComponent<Rigidbody2D>().velocity = new Vector2 (0, 0);
+		Animator animator = GetComponent<Animator> ();
+		animator.SetBool ("Frozen", value);
+		animator.Play ("Idle");
 	}
 
 }
