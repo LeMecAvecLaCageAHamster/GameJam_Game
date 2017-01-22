@@ -12,7 +12,6 @@ public class Player : MonoBehaviour
 
 
     Camera mainCamera;
-    public ParticleSystem particle;
     private bool printDead = true;
 	public float deathHeight = -30;
 
@@ -34,9 +33,6 @@ public class Player : MonoBehaviour
         if (isAlive == false && printDead == true)
         {
 			Freeze (true);
-            particle.enableEmission = true;
-            particle.Play();
-            print("Instantie particules");
             printDead = false;
 			StartCoroutine (respawn ());
         }

@@ -16,7 +16,7 @@ public class IA_FS : Monster {
     private Vector2 movement;
     private Vector3 jumping = new Vector3(0, 1,0);
     private bool dead = false;
-    public Transform deathWave;
+    public ParticleSystem particle;
     // Use this for initialization
     void Start () {
         rb = this.GetComponent<Rigidbody2D>();
@@ -73,16 +73,10 @@ public class IA_FS : Monster {
 
     IEnumerator DeathAnimation()
     {
-        for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / 1f)
-        {
-            // Opacity
-            Color newColor = new Color(0, 0, 0, Mathf.Lerp(1, 0f, t));
-            deathWave.GetComponent<Renderer>().material.color = newColor;
-
-            // Size
-            deathWave.localScale = Vector3.Lerp(new Vector3(0, 0, 1), new Vector3(4, 4, 1), t);
-            yield return null;
-        }
+        particle.enableEmission = true;
+        particle.Play();
+        yield return new WaitForSeconds(1f);
+        particle.enableEmission = false;
 
         Destroy(gameObject);
     }
