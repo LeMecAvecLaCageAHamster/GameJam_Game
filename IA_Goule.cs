@@ -14,7 +14,9 @@ public class IA_Goule : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        
+		Vector3 theScale = transform.localScale;
+		theScale.x = -Mathf.Abs(theScale.x);
+		transform.localScale = theScale;
     }
 
 
@@ -22,12 +24,16 @@ public class IA_Goule : MonoBehaviour {
     
     void Update () {
         float step = speed * Time.deltaTime;
+		Vector3 theScale = transform.localScale;
         //float step = speed;
         if (sensDeplacement < 0 && Vector3.Distance(this.transform.position,LIAL.position ) < range){
             sensDeplacement = step;
+			theScale.x = Mathf.Abs(theScale.x);
         }else if (sensDeplacement > 0 && Vector3.Distance(this.transform.position, LIAR.position) < range){
             sensDeplacement = 0-step;
+			theScale.x = - Mathf.Abs(theScale.x);
         }
+		transform.localScale = theScale;
 
         transform.Translate(sensDeplacement,0,0);
     }
